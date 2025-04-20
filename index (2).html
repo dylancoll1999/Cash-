@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galleon Bar Cashing Up</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#007bff"> <script src="dexie.js"></script>
+
+</head>
+<body>
+    <div class="container">
+        <button id="theme-toggle" title="Toggle Theme" style="position: absolute; top: 15px; right: 15px; z-index: 10; background: none; border: none; font-size: 1.5em; cursor: pointer; padding: 5px; color: var(--text-color);">🌙</button>
+
+        <h1>Galleon Bar Cashing Up</h1>
+
+        <div class="date-selector">
+            <label for="current-date">Date:</label>
+            <input type="date" id="current-date" class="data-input">
+            <span id="full-date-display"></span>
+            <div class="date-nav-buttons">
+                <button id="prev-day" title="Go to previous day">Previous Day</button>
+                <button type="button" id="go-today" title="Go to current date">Go To Today</button>
+                <button id="next-day" title="Go to next day">Next Day</button>
+            </div>
+        </div>
+        <div id="status-message" class="status-message" style="min-height: 1.5em;"></div>
+
+        <table id="reconciliation-table">
+            <thead> <tr> <th>Denomination</th> <th>Till 1 (£)</th> <th class="till2-column">Till 2 (£)</th> <th class="till3-column">Till 3 (£)</th> </tr> </thead>
+            <tbody>
+             <tr> <td data-label="Denom">£50</td> <td data-label="Till 1"><input type="number" class="denomination-amount till1 navigable-input data-input" id="t1-50" min="0" step="0.01" placeholder="0.00"></td> <td data-label="Till 2" class="till2-column"><input type="number" class="denomination-amount till2 navigable-input data-input" id="t2-50" min="0" step="0.01" placeholder="0.00"></td> <td data-label="Till 3" class="till3-column"><input type="number" class="denomination-amount till3 navigable-input data-input" id="t3-50" min="0" step="0.01" placeholder="0.00"></td> </tr>
+             <tr> <td data-label="Denom">£20</td> <td data-label="Till 1"><input type="number" class="denomination-amount till1 navigable-input data-input" id="t1-20" min="0" step="0.01" placeholder="0.00"></td> <td data-label="Till 2" class="till2-column"><input type="number" class="denomination-amount till2 navigable-input data-input" id="t2-20" min="0" step="0.01" placeholder="0.00"></td> <td data-label="Till 3" class="till3-column"><input type="number" class="denomination-amount till3 navigable-input data-input" id="t3-20" min="0" step="0.01" placeholder="0.00"></td> </tr>
+             <tr> <td data-label="Denom">£10</td> <td data-label="Till 1"><input type="number" class="denomination-amount till1 navigable-input data-input" id="t1-10" min="0" step="0.01" placeholder="0.00"></td> <td data-label="Till 2" class="till2-column"><input type="number" class="denomination-amount till2 navigable-input data-input" id="t2-10" min="0" step="0.01" placeholder="0.00"></td> <td data-label="Till 3" class="till3-column"><input type="number" class="denomination-amount till3 navigable-input data-input" id="t3-10" min="0" step="0.01" placeholder="0.00"></td> </tr>
+             <tr> <td data-label="Denom">£5</td> <td data-label="Till 1"><input type="number" class="denomination-amount till1 navigable-input data-input" id="t1-5" min="0" step="0.01" placeholder="0.00"></td> <td data-label="Till 2" class="till2-column"><input type="number" class="denomination-amount till2 navigable-input data-input" id="t2-5" min="0" step="0.01" placeholder="0.00"></td> <td data-label="Till 3" class="till3-column"><input type="number" class="denomination-amount till3 navigable-input data-input" id="t3-5" min="0" step="0.01" placeholder="0.00"></td> </tr>
+             <tr> <td data-label="Denom">£2</td> <td data-label="Till 1"><input type="number" class="denomination-amount till1 navigable-input data-input" id="t1-2" min="0" step="0.01" placeholder="0.00"></td> <td data-label="Till 2" class="till2-column"><input type="number" class="denomination-amount till2 navigable-input data-input" id="t2-2" min="0" step="0.01" placeholder="0.00"></td> <td data-label="Till 3" class="till3-column"><input type="number" class="denomination-amount till3 navigable-input data-input" id="t3-2" min="0" step="0.01" placeholder="0.00"></td> </tr>
+             <tr> <td data-label="Denom">£1</td> <td data-label="Till 1"><input type="number" class="denomination-amount till1 navigable-input data-input" id="t1-1" min="0" step="0.01" placeholder="0.00"></td> <td data-label="Till 2" class="till2-column"><input type="number" class="denomination-amount till2 navigable-input data-input" id="t2-1" min="0" step="0.01" placeholder="0.00"></td> <td data-label="Till 3" class="till3-column"><input type="number" class="denomination-amount till3 navigable-input data-input" id="t3-1" min="0" step="0.01" placeholder="0.00"></td> </tr>
+             <tr> <td data-label="Denom">50p</td> <td data-label="Till 1"><input type="number" class="denomination-amount till1 navigable-input data-input" id="t1-0p50" min="0" step="0.01" placeholder="0.00"></td> <td data-label="Till 2" class="till2-column"><input type="number" class="denomination-amount till2 navigable-input data-input" id="t2-0p50" min="0" step="0.01" placeholder="0.00"></td> <td data-label="Till 3" class="till3-column"><input type="number" class="denomination-amount till3 navigable-input data-input" id="t3-0p50" min="0" step="0.01" placeholder="0.00"></td> </tr>
+             <tr> <td data-label="Denom">20p</td> <td data-label="Till 1"><input type="number" class="denomination-amount till1 navigable-input data-input" id="t1-0p20" min="0" step="0.01" placeholder="0.00"></td> <td data-label="Till 2" class="till2-column"><input type="number" class="denomination-amount till2 navigable-input data-input" id="t2-0p20" min="0" step="0.01" placeholder="0.00"></td> <td data-label="Till 3" class="till3-column"><input type="number" class="denomination-amount till3 navigable-input data-input" id="t3-0p20" min="0" step="0.01" placeholder="0.00"></td> </tr>
+             <tr> <td data-label="Denom">10p</td> <td data-label="Till 1"><input type="number" class="denomination-amount till1 navigable-input data-input" id="t1-0p10" min="0" step="0.01" placeholder="0.00"></td> <td data-label="Till 2" class="till2-column"><input type="number" class="denomination-amount till2 navigable-input data-input" id="t2-0p10" min="0" step="0.01" placeholder="0.00"></td> <td data-label="Till 3" class="till3-column"><input type="number" class="denomination-amount till3 navigable-input data-input" id="t3-0p10" min="0" step="0.01" placeholder="0.00"></td> </tr>
+             <tr> <td data-label="Denom">5p</td> <td data-label="Till 1"><input type="number" class="denomination-amount till1 navigable-input data-input" id="t1-0p05" min="0" step="0.01" placeholder="0.00"></td> <td data-label="Till 2" class="till2-column"><input type="number" class="denomination-amount till2 navigable-input data-input" id="t2-0p05" min="0" step="0.01" placeholder="0.00"></td> <td data-label="Till 3" class="till3-column"><input type="number" class="denomination-amount till3 navigable-input data-input" id="t3-0p05" min="0" step="0.01" placeholder="0.00"></td> </tr>
+            </tbody>
+         <tfoot >
+             <tr>
+                 <td data-label="Summary" title="Sum of all cash denominations entered above for this till">Total Cash</td>
+                 <td data-label="T1 Total" id="t1-total-cash">£0.00</td>
+                 <td data-label="T2 Total" id="t2-total-cash" class="till2-column">£0.00</td>
+                 <td data-label="T3 Total" id="t3-total-cash" class="till3-column">£0.00</td>
+             </tr>
+             <tr>
+                 <td data-label="Summary" title="Actual cash takings for this till (Total Cash minus the standard float amount)" id="float-label-cell">-£200.00 Float</td>
+                 <td data-label="T1 Actual" id="t1-actual-cash">£0.00</td>
+                 <td data-label="T2 Actual" id="t2-actual-cash" class="till2-column">£0.00</td>
+                 <td data-label="T3 Actual" id="t3-actual-cash" class="till3-column">£0.00</td>
+             </tr>
+             <tr>
+                 <td data-label="Summary" title="Total value of card transactions processed through this till's PDQ machine(s)">Card Totals</td>
+                 <td data-label="T1 Card">
+                     <div class="pdq-inputs-container" id="t1-pdq-container">
+                         <div class="pdq-input-group">
+                             <input type="number" step="0.01" value="0" min="0" class="navigable-input data-input till1-pdq" title="PDQ Machine 1 Total (Till 1)">
+                             <button type="button" class="remove-pdq-btn" style="display: none;" title="Remove this PDQ total">-</button>
+                         </div>
+                     </div>
+                     <button type="button" class="add-pdq-btn" data-till="1" title="Add another PDQ total for Till 1">+</button>
+                 </td>
+                 <td data-label="T2 Card" class="till2-column">
+                    <div class="pdq-inputs-container" id="t2-pdq-container">
+                        <div class="pdq-input-group">
+                            <input type="number" step="0.01" value="0" min="0" class="navigable-input data-input till2-pdq" title="PDQ Machine 1 Total (Till 2)">
+                            <button type="button" class="remove-pdq-btn" style="display: none;" title="Remove this PDQ total">-</button>
+                        </div>
+                    </div>
+                    <button type="button" class="add-pdq-btn" data-till="2" title="Add another PDQ total for Till 2">+</button>
+                </td>
+                 <td data-label="T3 Card" class="till3-column">
+                    <div class="pdq-inputs-container" id="t3-pdq-container">
+                        <div class="pdq-input-group">
+                            <input type="number" step="0.01" value="0" min="0" class="navigable-input data-input till3-pdq" title="PDQ Machine 1 Total (Till 3)">
+                            <button type="button" class="remove-pdq-btn" style="display: none;" title="Remove this PDQ total">-</button>
+                        </div>
+                    </div>
+                    <button type="button" class="add-pdq-btn" data-till="3" title="Add another PDQ total for Till 3">+</button>
+                </td>
+             </tr>
+             <tr>
+                 <td data-label="Summary" title="Total cash paid out from this till for invoices, supplier payments, wages, etc.">Invoices</td>
+                 <td data-label="T1 Inv"><input type="number" id="t1-invoices" step="0.01" value="0" min="0" class="navigable-input data-input" title="Paid out from Till 1"></td>
+                 <td data-label="T2 Inv" class="till2-column"><input type="number" id="t2-invoices" step="0.01" value="0" min="0" class="navigable-input data-input" title="Paid out from Till 2"></td>
+                 <td data-label="T3 Inv" class="till3-column"><input type="number" id="t3-invoices" step="0.01" value="0" min="0" class="navigable-input data-input" title="Paid out from Till 3"></td>
+             </tr>
+             <tr>
+                 <td data-label="Summary" title="The total sales figure from this till's Z-Read / End-of-Day report">Z Receipt</td>
+                 <td data-label="T1 Z"><input type="number" id="t1-zreceipt" step="0.01" value="0" min="0" class="navigable-input data-input" title="Enter Till 1 Z-Read total"></td>
+                 <td data-label="T2 Z" class="till2-column"><input type="number" id="t2-zreceipt" step="0.01" value="0" min="0" class="navigable-input data-input" title="Enter Till 2 Z-Read total"></td>
+                 <td data-label="T3 Z" class="till3-column"><input type="number" id="t3-zreceipt" step="0.01" value="0" min="0" class="navigable-input data-input" title="Enter Till 3 Z-Read total"></td>
+             </tr>
+             <tr>
+                  <td data-label="Summary" title="Calculated Difference: (Actual Cash [after float removed] + Card Totals + Invoices) - Z Receipt. Should ideally be £0.00.">Difference</td>
+                  <td data-label="T1 Diff" id="t1-difference">£0.00</td>
+                  <td data-label="T2 Diff" id="t2-difference" class="till2-column">£0.00</td>
+                  <td data-label="T3 Diff" id="t3-difference" class="till3-column">£0.00</td>
+             </tr>
+             </tfoot>
+        </table>
+
+        <div class="float-suggestions-container">
+            <div id="t1-float-suggestion" class="float-suggestion"></div>
+            <div id="t2-float-suggestion" class="float-suggestion till2-column"></div>
+            <div id="t3-float-suggestion" class="float-suggestion till3-column"></div>
+        </div>
+
+
+        <div class="summary-section">
+            <h2 id="summary-title">Overall Summary</h2>
+
+            <p><span id="label-total-z" title="Sum of all Z Receipt totals entered for active tills (Daily or Weekly)">Total Z:</span> <span id="total-z">£0.00</span></p>
+            <p><span id="label-total-difference" title="Sum of differences calculated for all active tills (Daily or Weekly). Should ideally be zero.">Total Difference:</span> <span id="total-difference">£0.00</span></p>
+            <p><label id="label-pdq-total" for="pdq-total-display" title="Sum of Card Totals entered for all active tills (Daily or Weekly)">PDQ Total:</label> <span id="pdq-total-display">£0.00</span></p>
+            <p><label id="label-total-banked" for="total-banked-display" title="Total actual cash (Total Cash Counted minus standard float for each active till) expected to be banked (Daily or Weekly)">Total Banked:</label> <span id="total-banked-display">£0.00</span></p>
+            <p>
+                <label for="signed-by">Signed:</label>
+                <input type="text" id="signed-by" placeholder="Enter name" class="navigable-input data-input" list="names-list">
+                <datalist id="names-list">
+                    </datalist>
+            </p>
+             <p style="display: block; text-align: left; margin-top: 20px;">
+                  <label for="day-notes" style="font-weight: 600; color: var(--text-color);">
+                    Notes: <span id="notes-exist-indicator" class="notes-indicator" title="Notes exist for this day">📝</span>
+                  </label><br>
+                  <textarea id="day-notes" class="data-input navigable-input" rows="3" title="Enter any notes relevant to this day's cashing up (e.g., reasons for discrepancies, events)"></textarea>
+             </p>
+
+             <div id="backup-reminder" style="min-height: 1.2em;"></div>
+
+            <div class="action-buttons">
+                <button id="save-day">Save Day</button>
+                <button type="button" id="clear-form">Clear Current Day</button>
+                <button type="button" id="print-button">Print Page</button>
+                <button type="button" id="dev-modal-button">Data & Dev Tools</button>
+                <input type="file" id="csv-import-file" accept=".csv" style="display: none;">
+                <input type="file" id="json-import-file" accept=".json" style="display: none;">
+            </div>
+        </div>
+
+    </div> <div id="dev-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="modal-close-button">&times;</span>
+            <h2>Data Management & Dev Tools</h2>
+
+            <div class="modal-section">
+                <h3>Settings</h3>
+                <div style="margin-bottom: 15px;">
+                    <label for="setting-float-amount" style="display: inline-block; width: 220px;">Standard Float Amount (£):</label>
+                    <input type="number" id="setting-float-amount" step="0.01" min="0" placeholder="200.00" style="width: 100px; text-align: right;">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label for="setting-discrepancy-threshold" style="display: inline-block; width: 220px;">Discrepancy Threshold (£):</label>
+                    <input type="number" id="setting-discrepancy-threshold" step="0.01" min="0" placeholder="10.00" style="width: 100px; text-align: right;">
+                </div>
+                 <div style="margin-bottom: 15px;">
+                    <label for="setting-high-twenty-threshold" style="display: inline-block; width: 220px;">High £20 Note Warning (£):</label>
+                    <input type="number" id="setting-high-twenty-threshold" step="0.01" min="0" placeholder="1000.00" style="width: 100px; text-align: right;">
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label style="display: inline-block; width: 220px;">Hide Tills:</label>
+                    <input type="checkbox" id="setting-hide-till2" style="margin-right: 5px; vertical-align: middle;">
+                    <label for="setting-hide-till2" style="margin-right: 15px; font-weight: normal; vertical-align: middle;">Hide Till 2</label>
+                    <input type="checkbox" id="setting-hide-till3" style="margin-right: 5px; vertical-align: middle;">
+                    <label for="setting-hide-till3" style="font-weight: normal; vertical-align: middle;">Hide Till 3</label>
+                </div>
+                 <div style="margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 15px;">
+                      <button type="button" id="reset-settings-button" title="Reset all settings above to their defaults">Reset Settings to Default</button>
+                      <p style="font-size: 0.8em; margin-top: 10px;">(Settings are saved automatically when changed)</p>
+                 </div>
+            </div>
+
+            <div class="modal-section">
+                <h3>Import Data</h3>
+                 <button type="button" id="import-csv-button">Import Day from CSV</button>
+                 <button type="button" id="import-all-button">Import All (JSON Backup)</button>
+                 <p style="font-size: 0.8em; margin-top: 5px;">(Import All replaces the entire 'Signed By' list and overwrites matching dates)</p>
+            </div>
+
+            <div class="modal-section">
+                <h3>Export Data</h3>
+                <button type="button" id="export-csv-button">Export Day to CSV</button>
+                <button type="button" id="export-all-button">Export All (JSON Backup)</button>
+            </div>
+
+            <div class="modal-section danger-zone">
+                 <h3 style="color: #dc3545;">Danger Zone!</h3>
+                 <p style="color: red; font-weight: bold;">Warning: Actions below can permanently delete data!</p>
+                 <button type="button" id="dev-clear-names">Clear 'Signed By' List</button>
+                 <button type="button" id="dev-clear-entries">Clear All Daily Entries</button>
+                 <button type="button" id="dev-nuke-db">Nuke Database</button>
+                 <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee;">
+                    <label for="dev-name-to-delete" style="margin-right: 5px;">Name to Delete:</label>
+                    <input type="text" id="dev-name-to-delete" placeholder="Enter exact name" size="20" style="width: auto; text-align: left; padding: 5px 8px; font-size: 0.9em;">
+                    <button type="button" id="dev-delete-one-name" style="margin-left: 5px;">Delete This Name</button>
+                 </div>
+                 <hr style="margin-top: 20px;">
+                 <button type="button" id="dev-generate-data">Generate Test Data (10 Days)</button>
+             </div>
+
+             <div id="dev-modal-status" style="margin-top: 15px; font-weight: bold; min-height: 1.2em;"></div>
+        </div>
+    </div>
+    <div id="busy-overlay" style="display: none;">
+        <div class="spinner"></div>
+    </div>
+
+    <script src="script.js" defer></script>
+
+</body>
+</html>
